@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^11.1.0",
     "ag-grid-community": "^32.2.2",
     "ag-grid-vue3": "^32.2.2",
     "papaparse": "^5.4.1",
