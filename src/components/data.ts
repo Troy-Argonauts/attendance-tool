@@ -24,7 +24,7 @@ export type CSVData = {
   'Column 20': string;
 };
 
-export type TData = {
+export type TRawData = {
   volunteerHours: string;
   timestamp: string;
   firstName: string;
@@ -33,7 +33,7 @@ export type TData = {
   fullName: string;
   sector: string;
   reviewedHandbook: string;
-  regarding: string;
+  regarding: 'Volunteer hours (team hosted event including Helping at Competition / outreach)' | 'Shop hours' | 'Sponsor/Fundraising';
   teamHosted: string;
   hours: string;
   helpDesc: string;
@@ -51,6 +51,11 @@ export type TData = {
 
   daySubmitted: Date;
 };
+
+export type TData = TRawData & {
+  totalVolunteerHours: number;
+  shopDaysPresent: number;
+}
 
 export const columnIdNameMap = {
   volunteerHours: 'Volunteer Hours',
@@ -77,6 +82,8 @@ export const columnIdNameMap = {
   donorName: 'Who was the name of the donor (First and Last name or Company Name):',
   donationAmount: 'How much did they donate?',
   column20: 'Column 20',
+  totalVolunteerHours: 'Volunteer Hours To Date',
+  shopDaysPresent: 'Shop Days Present',
 } as const satisfies Record<keyof TData, string>;
 
 export const columnNameIdMap = Object.fromEntries(Object.entries(columnIdNameMap).map(([key, value]) => [value, key])) as Record<string, keyof TData>;

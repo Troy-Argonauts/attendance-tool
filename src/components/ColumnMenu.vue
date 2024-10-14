@@ -6,7 +6,9 @@
       &nbsp;
       <button @click="selectNone">None</button>
     </p>
-    <ul style="flex: 1">
+    <ul :style="{
+      flex: '1 0 0',
+    }">
       <li v-for="colId of allColumnIds">
         <input
           type="checkbox"
