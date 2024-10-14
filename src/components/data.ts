@@ -38,7 +38,7 @@ export type TRawData = {
   hours: string;
   helpDesc: string;
   competition: string;
-  attendanceStatus: string;
+  attendanceStatus: 'Absent' | 'Present' | 'Approved';
   picture: string;
   postedInChannel: string;
   situationCategory: string;

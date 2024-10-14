@@ -109,7 +109,7 @@ function processCsvText (rawCsvText: string) {
       studentStats.volunteerHours += Number(row.hours);
       // TODO validate number
     } else if (row.regarding === 'Shop hours') {
-      studentStats.shopDaysPresent += 1;
+      if (row.attendanceStatus !== 'Absent') studentStats.shopDaysPresent += 1;
       // TODO multiple submissions on the same day.
       // TODO submissions for days that aren't shop days.
     } else {
