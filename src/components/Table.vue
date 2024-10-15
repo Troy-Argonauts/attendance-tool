@@ -98,6 +98,7 @@ function processCsvText (rawCsvText: string) {
   
     // derived fields
     row.daySubmitted = new Date(csvRow.Timestamp);
+    row.mergeName = `${(row.firstName || '').trim().toLowerCase()} ${(row.lastName || '').trim().toLowerCase()}`;
   
     // calculated fields
     const studentStats = stats.students[row.mergeName] || {
@@ -120,6 +121,7 @@ function processCsvText (rawCsvText: string) {
     rowDataValue.push(row);
   }
   rowData.value = rowDataValue;
+  console.log({ stats });
 }
 
 watch(() => props.csvText, processCsvText, { immediate: true });
