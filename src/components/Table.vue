@@ -68,7 +68,7 @@ function processCsvText (rawCsvText: string) {
   // any line that is just ",,,,,,,,,,,,,,,,,,,,,," can be removed
   const stripped = rawCsvText
     .split('\n')
-    .filter((line) => line.trim() !== ',,,,,,,,,,,,,,,,,,,,,,') // also need to trim first because of `\r\n` possibility
+    .filter((line) => !line.trim().match(/^,+$/mug)) // also need to trim first because of `\r\n` possibility
     .join('\n');
   
   const {
