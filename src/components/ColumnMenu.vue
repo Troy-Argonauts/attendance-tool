@@ -9,12 +9,15 @@
       @click="localEnabledColumns[colId] = !localEnabledColumns[colId]"
     >
       <template v-slot:prepend>
-        <input
+        <v-icon
+            :icon="localEnabledColumns[colId] ? 'mdi-checkbox-marked' : 'mdi-checkbox-blank-outline'"
+        />
+        <!-- <input
           type="checkbox"
           v-model="localEnabledColumns[colId]"
           :id="'column-menu:' + colId"
           class="ma-2"
-        />
+        /> -->
       </template>
       <template v-slot:title>
         <v-list-item-title v-text="columnIdNameMap[colId]" :title="columnIdNameMap[colId]"/>

@@ -201,3 +201,9 @@ function processCsvText (rawCsvText: string) {
 }
 
 watch(csvText, processCsvText, { immediate: true });
+
+export const shopDates = useLocalStorage<Record<string, boolean>>('shopDates', {
+    '10/1': true,
+    '10/8': true,
+    '10/15': true,
+});

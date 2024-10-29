@@ -4,6 +4,7 @@ import ColumnMenu from './components/ColumnMenu.vue';
 import { type TData, csvText, storedFile, tableIssues } from './components/data';
 import { useLocalStorage } from '@vueuse/core';
 import { ref , watch, computed } from 'vue';
+import ShopDates from './components/ShopDates.vue';
 
 const enabledColumns = useLocalStorage(
   'enabledColumns',
@@ -85,10 +86,11 @@ const fileInputLabel = computed(() => {
           <v-navigation-drawer
             location="right"
             permanent
+            app
           >
             <ColumnMenu :enabledColumns.sync="enabledColumns" />
           </v-navigation-drawer>
-          <v-main class="d-flex flex-column">
+          <v-main class="d-flex flex-column" app>
             <div>
               <v-alert
                 v-for="(issue, idx) in tableIssues"
@@ -103,7 +105,9 @@ const fileInputLabel = computed(() => {
           </v-main>
         </v-layout>
         <v-layout v-else-if="tab === 1">
-          Shop Days?
+          <v-main app>
+            <ShopDates class="mx-auto" style="max-width: 6in" />
+          </v-main>
         </v-layout>
         <v-layout v-else-if="tab === 2">
           Students
