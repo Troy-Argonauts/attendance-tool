@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Table from './components/Table.vue';
 import ColumnMenu from './components/ColumnMenu.vue';
-import { type TData, tableIssues } from './components/data';
+import { type TData, csvText, storedFile, tableIssues } from './components/data';
 import { useLocalStorage } from '@vueuse/core';
 import { ref , watch, computed } from 'vue';
 
@@ -10,19 +10,6 @@ const enabledColumns = useLocalStorage(
   {} as Record<keyof TData, boolean>,
 );
 
-const storedFile = useLocalStorage<{ content: string; date: string } | null>('storedCSV', null, {
-    serializer: {
-        read: JSON.parse,
-        write: JSON.stringify,
-    },
-});
-
-const csvText = computed({
-    get: () => storedFile.value?.content || '',
-    set: (value: string) => {
-        storedFile.value = { content: value, date: new Date().toISOString() };
-    },
-});
 const fileSelectedDate = computed(() => storedFile.value?.date ? new Date(storedFile.value.date) : null);
 
 const file = ref<File | null>(null);
