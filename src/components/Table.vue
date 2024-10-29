@@ -1,6 +1,6 @@
 <template>
   <!-- The AG Grid component -->
-  <div class="table-cloth">
+  <v-card rounded class="table-cloth">
     <ag-grid-vue
       v-if="anyEnabledColumn"
       :rowData="rowData"
@@ -12,7 +12,7 @@
     <div v-else>
       <p>No columns are enabled.</p>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <style scoped>

@@ -1,37 +1,26 @@
 <template>
-  <div style="display: flex; flex-direction: column">
-    <h3>Column Menu</h3>
-    <p>
-      <button @click="selectAll">All</button>
-      &nbsp;
-      <button @click="selectNone">None</button>
-    </p>
-    <ul :style="{
-      flex: '1 0 0',
-    }">
-      <li v-for="colId of allColumnIds">
+  <v-list density="compact">
+    <v-list-subheader>Column Menu</v-list-subheader>
+    <v-btn @click="selectAll" density="compact" class="ma-2" block text="Select All" />
+    <v-btn @click="selectNone" density="compact" class="ma-2" block text="Select None" />
+    <v-list-item
+      v-for="colId of allColumnIds"
+      :key="colId"
+      @click="localEnabledColumns[colId] = !localEnabledColumns[colId]"
+    >
+      <template v-slot:prepend>
         <input
           type="checkbox"
           v-model="localEnabledColumns[colId]"
           :id="'column-menu:' + colId"
+          class="ma-2"
         />
-        <label :for="'column-menu:' + colId">{{ columnIdNameMap[colId] }}</label>
-      </li>
-    </ul>
-    <div>
-      <!-- EXAMPLE -->
-      <label for="preset">Presets:</label>
-      <select name="preset">
-        <option>Shop Hours</option>
-        <option>Volunteer Hours</option>
-      </select>
-      <button>Apply</button>
-      <br />
-      <button>Save</button>
-      <button>Save As</button>
-      <button>Delete</button>
-    </div>
-  </div>
+      </template>
+      <template v-slot:title>
+        <v-list-item-title v-text="columnIdNameMap[colId]" :title="columnIdNameMap[colId]"/>
+      </template>
+    </v-list-item>
+  </v-list>
 </template>
 
 <script setup lang="ts">
