@@ -1,3 +1,5 @@
+import { reactive } from "vue";
+
 export type CSVData = {
   'Volunteer Hours': string;
   Timestamp: string;
@@ -89,3 +91,5 @@ export const columnIdNameMap = {
 export const columnNameIdMap = Object.fromEntries(Object.entries(columnIdNameMap).map(([key, value]) => [value, key])) as Record<string, keyof TData>;
 
 export const allColumnIds = Object.keys(columnIdNameMap) as (keyof TData)[];
+
+export const tableIssues: string[] = reactive([]);

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Table from './components/Table.vue';
 import ColumnMenu from './components/ColumnMenu.vue';
-import { type TData } from './components/data';
+import { type TData, tableIssues } from './components/data';
 import { useLocalStorage } from '@vueuse/core';
 import { ref , watch, computed } from 'vue';
 
@@ -63,8 +63,9 @@ const fileInputLabel = computed(() => {
       >
         <v-tab
           :value="0"
+          :color="tableIssues.length > 0 ? 'red' : ''"
         >
-            <v-icon>mdi-table</v-icon>
+            <v-icon>{{ tableIssues.length > 0 ? 'mdi-alert' : 'mdi-table' }}</v-icon>
             <span>Table</span>
         </v-tab>
         <v-tab :value="1">
@@ -100,7 +101,17 @@ const fileInputLabel = computed(() => {
           >
             <ColumnMenu :enabledColumns.sync="enabledColumns" />
           </v-navigation-drawer>
-          <v-main class="d-flex">
+          <v-main class="d-flex flex-column">
+            <div>
+              <v-alert
+                v-for="(issue, idx) in tableIssues"
+                class="mb-2"
+                type="error"
+                closable
+                :text="issue"
+                @click:close="tableIssues.splice(idx, 1)"
+              />
+            </div>
             <Table :csvText="csvText" class="flex-grow-1" :enabledColumns="enabledColumns" />
           </v-main>
         </v-layout>

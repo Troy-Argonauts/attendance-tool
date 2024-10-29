@@ -30,8 +30,6 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from 'vue';
-import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the Data Grid
-import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional Theme applied to the Data Grid
 import { AgGridVue } from 'ag-grid-vue3'; // Vue Data Grid Component
 import { parse as parseCsv } from 'papaparse';
 import { GridOptions } from 'ag-grid-community';
@@ -41,6 +39,7 @@ import {
   CSVData,
   TData,
   columnNameIdMap,
+  tableIssues,
 } from './data';
 
 const props = defineProps<{
@@ -73,14 +72,20 @@ function processCsvText (rawCsvText: string) {
   
   const {
     data,
-    // TODO handle errors
-    // errors,
+    errors,
   } = parseCsv<CSVData>(stripped, {
     header: true,
     skipEmptyLines: true,
   });
+  if (errors.length > 0) {
+    alert('Error parsing CSV');
+    tableIssues.push(...errors.map(err => `[${err.type}](${err.index}): ${err.message}`))
+  }
   
-  
+  const processErrors = {
+    unknownRegards: new Set<string>(),
+    invalidHours: new Set<string>(),
+  };
   const rowDataValue: TData[] = [];
   for (const csvRow of data) {
     const row = {} as TData;
@@ -107,18 +112,27 @@ function processCsvText (rawCsvText: string) {
     };
     stats.students[row.mergeName] = studentStats;
     if (row.regarding === 'Volunteer hours (team hosted event including Helping at Competition / outreach)') {
-      studentStats.volunteerHours += Number(row.hours);
-      // TODO validate number
+      const hours = Number(row.hours);
+      if (Number.isFinite(hours)) {
+        studentStats.volunteerHours += hours;
+      } else {
+        processErrors.invalidHours.add(`${row.mergeName} entered an invalid value of '${row.hours}' for their hours`);
+      }
     } else if (row.regarding === 'Shop hours') {
       if (row.attendanceStatus !== 'Absent') studentStats.shopDaysPresent += 1;
       // TODO multiple submissions on the same day.
       // TODO submissions for days that aren't shop days.
     } else {
-      // TODO handle!
-      console.warn('Unknown value:', row.regarding);
+      processErrors.unknownRegards.add(row.regarding);
     }
   
     rowDataValue.push(row);
+  }
+  if (processErrors.unknownRegards.size > 0) {
+    tableIssues.push(`Unknown value(s) for "This is in regards to": ${Array.from(processErrors.unknownRegards).map(x => `'${x}'`).join(', ')}`);
+  }
+  if (processErrors.invalidHours.size > 0) {
+    tableIssues.push(...processErrors.invalidHours);
   }
   rowData.value = rowDataValue;
   console.log({ stats });
