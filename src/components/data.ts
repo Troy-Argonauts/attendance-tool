@@ -200,10 +200,13 @@ function processCsvText (rawCsvText: string) {
   console.log({ stats });
 }
 
-watch(csvText, processCsvText, { immediate: true });
+watch(csvText, processCsvText);
+if (csvText.value) {
+  processCsvText(csvText.value);
+}
 
 export const shopDates = useLocalStorage<Record<string, boolean>>('shopDates', {
-    '10/1': true,
-    '10/8': true,
-    '10/15': true,
+  '10/1': true,
+  '10/8': true,
+  '10/15': true,
 });
