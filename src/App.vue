@@ -6,6 +6,7 @@ import { type TData } from './types';
 import { useLocalStorage } from '@vueuse/core';
 import { ref , watch, computed } from 'vue';
 import ShopDates from './components/ShopDates.vue';
+import NameVerifyDialog from './components/NameVerifyDialog.vue';
 
 const enabledColumns = useLocalStorage(
   'enabledColumns',
@@ -131,6 +132,7 @@ function clearFiles () {
         </v-layout>
       </v-card>
     </v-main>
+    <NameVerifyDialog />
   </v-layout>
 </template>
 
