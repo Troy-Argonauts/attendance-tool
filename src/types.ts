@@ -83,6 +83,7 @@ export type DerivedData = {
 //   /** the student-selected date */
 //   selectedDate: Date | null;
   daySubmitted: Date;
+  attendanceStatus: BasicData['attendanceStatus'] | 'Absent (no entry)';
 };
 
 /** Normalized columns + derived values */

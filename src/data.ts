@@ -36,6 +36,7 @@ export const stats = reactive({
     {
       volunteerHours: number;
       shopDaysPresent: number;
+      shopDayEntries: TData[];
     }
   >,
 });
@@ -133,13 +134,24 @@ function processCsvText (rawCsvText: string) {
     const studentStats = stats.students[row.mergeName] || {
       volunteerHours: 0,
       shopDaysPresent: 0,
+      shopDayEntries: [],
     };
     stats.students[row.mergeName] = studentStats; // save it back to the stats object, in case we created it just now.
-  
-    rowDataValue.push({
+
+    const completeRow = {
       ...row,
       ...derivedData,
-    });
+    };
+
+    
+    if (row.regarding === 'Shop hours') {
+      studentStats.shopDaysPresent++;
+      studentStats.shopDayEntries.push(completeRow);
+    } else if (row.regarding === 'Volunteer hours (team hosted event including Helping at Competition / outreach)') {
+      studentStats.volunteerHours += Number(row.hours);
+    }
+  
+    rowDataValue.push(completeRow);
   }
   rowData.value = rowDataValue;
   console.log({ stats });
@@ -157,7 +169,11 @@ watch(csvText, () => {
 }, { immediate: true });
 
 export const shopDates = useLocalStorage<Record<string, boolean>>('shopDates', {
-  '10/1': true,
-  '10/8': true,
-  '10/15': true,
+  '2024-10-01': true,
+  '2024-10-02': true,
+  '2024-10-03': true,
 });
+
+export function getDateKey (date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}

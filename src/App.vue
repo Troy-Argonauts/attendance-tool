@@ -7,6 +7,8 @@ import { useLocalStorage } from '@vueuse/core';
 import { ref , watch, computed } from 'vue';
 import ShopDates from './components/ShopDates.vue';
 import NameVerifyDialog from './components/NameVerifyDialog.vue';
+import StudentStats from './components/StudentStats.vue';
+import { statsTableIssues } from './stats-validations';
 
 const enabledColumns = useLocalStorage(
   'enabledColumns',
@@ -62,19 +64,20 @@ function clearFiles () {
           :value="0"
           :color="tableIssues.length > 0 ? 'red' : ''"
         >
-            <v-icon>{{ tableIssues.length > 0 ? 'mdi-alert' : 'mdi-table' }}</v-icon>
-            <span>Table</span>
+          <v-icon>{{ tableIssues.length > 0 ? 'mdi-alert' : 'mdi-table' }}</v-icon>
+          <span>Table</span>
         </v-tab>
         <v-tab :value="1">
-            <v-icon>mdi-calendar</v-icon>
-            <span>Shop Days</span>
+          <v-icon>mdi-calendar</v-icon>
+          <span>Shop Days</span>
         </v-tab>
         <v-tab
           text="Students"
           :value="2"
+          :color="statsTableIssues.length > 0 ? 'red' : ''"
         >
-            <v-icon>mdi-scale-unbalanced</v-icon>
-            <span>Students</span>
+          <v-icon>{{ statsTableIssues.length > 0 ? 'mdi-alert' : 'mdi-scale-unbalanced' }}</v-icon>
+          <span>Students</span>
         </v-tab>
       </v-tabs>
       <v-file-input
@@ -127,8 +130,18 @@ function clearFiles () {
             <ShopDates class="mx-auto" style="max-width: 6in" />
           </v-main>
         </v-layout>
-        <v-layout v-else-if="tab === 2">
-          Students
+        <v-layout v-else-if="tab === 2" class="flex-column">
+          <div>
+            <v-alert
+              v-for="(issue, idx) in statsTableIssues"
+              class="mb-2"
+              type="error"
+              closable
+              :text="`${issue.student} - ${issue.date}: ${issue.issue}`"
+              @click:close="statsTableIssues.splice(idx, 1)"
+            />
+          </div>
+          <StudentStats style="flex: 1;" />
         </v-layout>
       </v-card>
     </v-main>
