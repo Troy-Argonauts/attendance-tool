@@ -145,7 +145,9 @@ function processCsvText (rawCsvText: string) {
 
     
     if (row.regarding === 'Shop hours') {
-      studentStats.shopDaysPresent++;
+      if (row.attendanceStatus === 'APPROVED' || row.attendanceStatus === 'Present') {
+        studentStats.shopDaysPresent++;
+      }
       studentStats.shopDayEntries.push(completeRow);
     } else if (row.regarding === 'Volunteer hours (team hosted event including Helping at Competition / outreach)') {
       studentStats.volunteerHours += Number(row.hours);

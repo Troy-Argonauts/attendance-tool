@@ -83,7 +83,7 @@ export type DerivedData = {
 //   /** the student-selected date */
 //   selectedDate: Date | null;
   daySubmitted: Date;
-  attendanceStatus: BasicData['attendanceStatus'] | 'Absent (no entry)';
+  attendanceStatus: BasicData['attendanceStatus'] | 'Absent (no entry)' | 'Cancelled Shop Day';
 };
 
 /** Normalized columns + derived values */

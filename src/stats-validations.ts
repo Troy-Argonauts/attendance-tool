@@ -35,10 +35,11 @@ watch([stats, shopDates], ([statsVal, shopDatesVal]) => {
         });
       }
 
-      // stop after 50 issues
-      if (statsTableIssues.length >= 50) {
-        return;
-      }
+      // // stop after 50 issues
+      // if (statsTableIssues.length > 50) {
+      //   return;
+      // }
     }
   }
+  console.log({ statsTableIssues });
 }, { immediate: true });

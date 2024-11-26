@@ -133,12 +133,20 @@ function clearFiles () {
         <v-layout v-else-if="tab === 2" class="flex-column">
           <div>
             <v-alert
-              v-for="(issue, idx) in statsTableIssues"
+              v-for="(issue, idx) in statsTableIssues.slice(0, 50)"
               class="mb-2"
               type="error"
               closable
               :text="`${issue.student} - ${issue.date}: ${issue.issue}`"
               @click:close="statsTableIssues.splice(idx, 1)"
+            />
+            <v-alert
+              v-if="statsTableIssues.length > 50"
+              class="mb-2"
+              type="error"
+              closable
+              :text="`And ${statsTableIssues.length - 50} more...`"
+              @click:close="statsTableIssues.splice(50)"
             />
           </div>
           <StudentStats style="flex: 1;" />

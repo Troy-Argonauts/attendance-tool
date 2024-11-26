@@ -21,6 +21,15 @@
   bottom: 0;
   position: absolute;
 }
+.cell-cancelled {
+  background-color: lightgray;
+}
+.cell-absent {
+  background-color: lightcoral;
+}
+.cell-present {
+  background-color: lightgreen;
+}
 </style>
 
 <script lang="ts" setup>
@@ -28,7 +37,7 @@ import {
   computed,
 } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3'; // Vue Data Grid Component
-import { GridOptions, ValueGetterParams } from 'ag-grid-community';
+import { CellClassParams, CellStyleFunc, GridOptions, ValueGetterParams } from 'ag-grid-community';
 import {
   stats,
   shopDates,
@@ -81,6 +90,17 @@ const colDefs = computed<NonNullable<GridOptions['columnDefs']>>(() => [
           return foundEntry ? foundEntry['attendanceStatus'] : 'Absent (no entry)';
         } else {
           return 'Absent (no entry)';
+        }
+      },
+      cellStyle: (params: CellClassParams<StudentStatsRowData, TData['attendanceStatus']>) => {
+        if (params.value === 'Cancelled Shop Day') {
+          return { backgroundColor: 'lightgray' };
+        } else if (params.value === 'Absent (no entry)' || params.value === 'Absent') {
+          return { backgroundColor: 'lightcoral' };
+        } else if (params.value === 'Present') {
+          return { backgroundColor: 'lightgreen' };
+        } else {
+          return null;
         }
       },
     })),
