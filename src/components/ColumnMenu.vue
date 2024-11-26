@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { computed, watch } from 'vue';
-import { allColumnIds, type TData, columnIdNameMap } from './data';
+import { allColumnIds, type TData, columnIdNameMap } from '../types';
 
 const props = defineProps<{
   enabledColumns: Record<keyof TData, boolean>;

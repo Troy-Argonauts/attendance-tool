@@ -33,53 +33,57 @@ import { computed } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3'; // Vue Data Grid Component
 import { GridOptions } from 'ag-grid-community';
 import {
+  rowData,
+} from '../data';
+import {
   allColumnIds,
   columnIdNameMap,
-  stats,
   TData,
-  rowData,
-} from './data';
+} from '../types';
 
 const props = defineProps<{
   enabledColumns: Record<string, boolean>;
-  csvText: string;
+  csvText: string | null;
 }>();
 
 // Column Definitions: Defines the columns to be displayed.
-const colDefs = computed<NonNullable<GridOptions<TData>['columnDefs']>>(() => [
-  ...allColumnIds
-    .map((colId) => ({
-      field: colId,
-      headerName: columnIdNameMap[colId],
-    }))
-    .filter((col) => props.enabledColumns[col.field!]),
-  
-  // calculated columns
-  {
-    field: 'totalVolunteerHours',
-    headerName: columnIdNameMap['totalVolunteerHours'],
-    valueGetter: params => {
-      if (params.data) {
-        const studentStats = stats.students[params.data.mergeName];
-        return studentStats?.volunteerHours;
-      } else {
-        return 0;
-      }
-    },
-  },
-  {
-    field: 'shopDaysPresent',
-    headerName: columnIdNameMap['shopDaysPresent'],
-    valueGetter: params => {
-      if (params.data) {
-        const studentStats = stats.students[params.data.mergeName];
-        return studentStats?.shopDaysPresent;
-      } else {
-        return 0;
-      }
-    },
-  },
-]);
+const colDefs = computed<NonNullable<GridOptions<TData>['columnDefs']>>(() => {
+  // // calculated columns
+  // const totalVolunteerHoursColDef: ColDef<TData> = {
+  //   field: 'totalVolunteerHours',
+  //   headerName: columnIdNameMap['totalVolunteerHours'],
+  //   valueGetter: params => {
+  //     if (params.data) {
+  //       const studentStats = stats.students[params.data.mergeName];
+  //       return studentStats?.volunteerHours;
+  //     } else {
+  //       return 0;
+  //     }
+  //   },
+  // };
+
+  return [
+    ...allColumnIds
+      .map((colId) => ({
+        field: colId,
+        headerName: columnIdNameMap[colId],
+      }))
+      .filter((col) => props.enabledColumns[col.field!]),
+    
+    // {
+    //   field: 'shopDaysPresent',
+    //   headerName: columnIdNameMap['shopDaysPresent'],
+    //   valueGetter: params => {
+    //     if (params.data) {
+    //       const studentStats = stats.students[params.data.mergeName];
+    //       return studentStats?.shopDaysPresent;
+    //     } else {
+    //       return 0;
+    //     }
+    //   },
+    // },
+  ]
+});
 
 const anyEnabledColumn = computed(() =>
   Boolean(allColumnIds.find((colId) => props.enabledColumns[colId])),

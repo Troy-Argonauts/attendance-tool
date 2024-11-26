@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { shopDates } from './data';
+import { shopDates } from '../data';
 import { computed, ref } from 'vue';
 
 const shopDatesTxtTemp = ref('');

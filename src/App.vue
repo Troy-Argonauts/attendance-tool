@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Table from './components/Table.vue';
 import ColumnMenu from './components/ColumnMenu.vue';
-import { type TData, csvText, storedFile, tableIssues } from './components/data';
+import { csvText, storedFile, tableIssues } from './data';
+import { type TData } from './types';
 import { useLocalStorage } from '@vueuse/core';
 import { ref , watch, computed } from 'vue';
 import ShopDates from './components/ShopDates.vue';
@@ -23,7 +24,7 @@ watch(file, fileVal => {
     };
     reader.readAsText(fileVal);
   } else {
-    csvText.value = '';
+    csvText.value = null;
   }
 });
 
@@ -38,6 +39,13 @@ const fileInputLabel = computed(() => {
         return 'Load CSV';
     }
 })
+
+function clearFiles () {
+  file.value = null;
+  csvText.value = null;
+
+}
+
 </script>
 
 <template>
@@ -77,8 +85,17 @@ const fileInputLabel = computed(() => {
         :hint="fileSelectedDate ? `Selected at ${fileSelectedDate.toLocaleTimeString()}` : ''"
         persistent-hint
         class="mr-4"
+        :clearable="false"
         variant="outlined"
-      />
+      >
+        <template #append-inner>
+          <v-btn
+            v-if="Boolean(csvText)"
+            icon="mdi-close-circle"
+            @click.stop="clearFiles()"
+          />
+        </template>
+      </v-file-input>
     </v-app-bar>
     <v-main class="d-flex">
       <v-card class="flex-grow-1 ma-2 d-flex">
