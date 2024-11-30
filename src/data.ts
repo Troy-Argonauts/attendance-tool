@@ -124,6 +124,7 @@ function processCsvText (rawCsvText: string) {
   
     const derivedData: DerivedData = {
       daySubmitted: new Date(row.timestamp),
+      attendanceStatus: row.attendanceStatus,
     };
 
     // google sheet has a calculation for mergeName, but we can do it better here.

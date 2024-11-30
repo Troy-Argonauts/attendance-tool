@@ -37,7 +37,7 @@ import {
   computed,
 } from 'vue';
 import { AgGridVue } from 'ag-grid-vue3'; // Vue Data Grid Component
-import { CellClassParams, CellStyleFunc, GridOptions, ValueGetterParams } from 'ag-grid-community';
+import { CellClassParams, GridOptions, ValueGetterParams } from 'ag-grid-community';
 import {
   stats,
   shopDates,
