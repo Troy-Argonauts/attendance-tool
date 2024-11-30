@@ -83,7 +83,6 @@ function processCsvText (rawCsvText: string) {
   for (const csvRow of data) {
     const row: BasicData = {
       attendanceStatus: csvRow['What is the status of your attendance for this date?'] as typeof knownAttendanceStatusValues[number],
-      column20: csvRow['Column 20'],
       competition: csvRow['What competition is this for?'],
       donationAmount: csvRow['How much did they donate?'],
       donationMethod: csvRow['How was this donation given:'],
@@ -104,8 +103,8 @@ function processCsvText (rawCsvText: string) {
       teamHosted: csvRow['What team hosted  (TRF, FTC, or FLL)  event / outreach is this for?'],
       timestamp: csvRow['Timestamp'],
       situationCategory: csvRow['Which of these categories does your situation fall under?'],
-      volunteerHours: csvRow['Volunteer Hours'],
       selectedDate: csvRow['Which day is this for?'] || null,
+      selectedDateApproved: csvRow['Manual date approved'] || '',
     };
   
     // validate mapped fields
@@ -123,8 +122,10 @@ function processCsvText (rawCsvText: string) {
     }
   
     const derivedData: DerivedData = {
+      selectedDate: row.selectedDate ? new Date(row.selectedDate) : null,
       daySubmitted: new Date(row.timestamp),
       attendanceStatus: row.attendanceStatus,
+      trackingDate: (row.selectedDate && row.selectedDateApproved) ? new Date(row.selectedDate) : new Date(row.timestamp),
     };
 
     // google sheet has a calculation for mergeName, but we can do it better here.

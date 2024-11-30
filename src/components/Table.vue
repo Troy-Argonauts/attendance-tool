@@ -48,20 +48,6 @@ const props = defineProps<{
 
 // Column Definitions: Defines the columns to be displayed.
 const colDefs = computed<NonNullable<GridOptions<TData>['columnDefs']>>(() => {
-  // // calculated columns
-  // const totalVolunteerHoursColDef: ColDef<TData> = {
-  //   field: 'totalVolunteerHours',
-  //   headerName: columnIdNameMap['totalVolunteerHours'],
-  //   valueGetter: params => {
-  //     if (params.data) {
-  //       const studentStats = stats.students[params.data.mergeName];
-  //       return studentStats?.volunteerHours;
-  //     } else {
-  //       return 0;
-  //     }
-  //   },
-  // };
-
   return [
     ...allColumnIds
       .map((colId) => ({

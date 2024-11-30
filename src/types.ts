@@ -1,6 +1,5 @@
 
 export const knownCsvColumns = [
-  'Volunteer Hours',
   'Timestamp',
   'First Name',
   'Last Name',
@@ -22,8 +21,8 @@ export const knownCsvColumns = [
   'How was this donation given:',
   'Who was the name of the donor (First and Last name or Company Name):',
   'How much did they donate?',
-  'Column 20',
   'Which day is this for?',
+  'Manual date approved',
 ] as const;
   
 /**
@@ -47,7 +46,6 @@ export const knownRegardingValues = [
  * non-calculated / derived fields
  */
 export type BasicData = {
-  volunteerHours: string;
   timestamp: string;
   firstName: string;
   lastName: string;
@@ -69,21 +67,28 @@ export type BasicData = {
   donationMethod: string;
   donorName: string;
   donationAmount: string;
-  column20: string;
   /**
    * the student-selected date
    *
    * it is nullable because it wasn't always defined
    */
   selectedDate: string | null;
+  /**
+   * Manual date approved
+   *
+   * Counts the `selectedDate` instead of `timestamp` if anything is in this row's cell
+   */
+  selectedDateApproved: string | null;
 };
 
 
 export type DerivedData = {
-//   /** the student-selected date */
-//   selectedDate: Date | null;
+  /** the student-selected date */
+  selectedDate: Date | null;
   daySubmitted: Date;
   attendanceStatus: BasicData['attendanceStatus'] | 'Absent (no entry)' | 'Cancelled Shop Day';
+  /** will be `selectedDate` if `selectedDateApproved` has any content. otherwise will be `daySubmitted` */
+  trackingDate: Date;
 };
 
 /** Normalized columns + derived values */
@@ -97,9 +102,9 @@ export type TData = Omit<BasicData, keyof DerivedData> & DerivedData;
  * If the column in the google sheet changes, this must update to match
  */
 export const columnIdNameMap = {
-  volunteerHours: 'Volunteer Hours',
   timestamp: 'Timestamp',
   daySubmitted: 'Day Submitted',
+  trackingDate: 'Tracking Date',
   firstName: 'First Name',
   lastName: 'Last Name',
   mergeName: 'Merge Name',
@@ -120,8 +125,8 @@ export const columnIdNameMap = {
   donationMethod: 'How was this donation given:',
   donorName: 'Who was the name of the donor (First and Last name or Company Name):',
   donationAmount: 'How much did they donate?',
-  column20: 'Column 20',
   selectedDate: 'Which day is this for?',
+  selectedDateApproved: 'Manual date approved',
 } as const satisfies Record<keyof TData, string>;
 
 /**

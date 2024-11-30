@@ -16,29 +16,31 @@ watch([stats, shopDates], ([statsVal, shopDatesVal]) => {
     const seenShopDays = new Set<string>();
     for (const entry of studentStats.shopDayEntries) {
       // check for duplicates
-      if (seenShopDays.has(getDateKey(entry.daySubmitted))) {
+      if (seenShopDays.has(getDateKey(entry.trackingDate))) {
         statsTableIssues.push({
           student: mergeName,
-          date: getDateKey(entry.daySubmitted),
+          date: getDateKey(entry.trackingDate),
           issue: 'Duplicate entry',
         });
+        console.warn('Duplicate entry', entry);
       } else {
-        seenShopDays.add(getDateKey(entry.daySubmitted));
+        seenShopDays.add(getDateKey(entry.trackingDate));
       }
 
       // check for entries on a non-shop day
-      if (!shopDatesVal[getDateKey(entry.daySubmitted)]) {
+      if (!shopDatesVal[getDateKey(entry.trackingDate)]) {
         statsTableIssues.push({
           student: mergeName,
-          date: getDateKey(entry.daySubmitted),
+          date: getDateKey(entry.trackingDate),
           issue: 'Entry on a non-shop day',
         });
+        console.warn('Entry on a non-shop day', entry);
       }
 
-      // // stop after 50 issues
-      // if (statsTableIssues.length > 50) {
-      //   return;
-      // }
+      // stop after 50 issues
+      if (statsTableIssues.length > 50) {
+        return;
+      }
     }
   }
   console.log({ statsTableIssues });

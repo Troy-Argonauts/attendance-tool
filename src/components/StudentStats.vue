@@ -86,7 +86,7 @@ const colDefs = computed<NonNullable<GridOptions['columnDefs']>>(() => [
         }
 
         if (params.data) {
-          const foundEntry = params.data.shopDayEntries.find(entry => getDateKey(entry.daySubmitted) === dateKey);
+          const foundEntry = params.data.shopDayEntries.find(entry => getDateKey(entry.trackingDate) === dateKey);
           return foundEntry ? foundEntry['attendanceStatus'] : 'Absent (no entry)';
         } else {
           return 'Absent (no entry)';
